@@ -1,10 +1,9 @@
--- create TABLE events (
--- id INT, 
--- name VARCHAR(255),
--- description TEXT(500),
--- location VARCHAR(255),
--- date VARCHAR(255),
--- type VARCHAR(255));
+create TABLE events (
+name VARCHAR(255),
+description TEXT(500),
+location VARCHAR(255),
+date VARCHAR(255),
+event_type VARCHAR(255));
 
 
 -- INSERT INTO events VALUES(
