@@ -1,2 +1,3 @@
 com\project\RSVPServlet.class
 com\project\AddEventServlet.class
+com\project\FilterEventsServlet.class

@@ -12,14 +12,14 @@
     <p>Type: <%= rs.getString("event_type") %></p>
     <p>Date: <%= rs.getString("date") %></p>
     <p>Location: <%= rs.getString("location") %></p>
+    <p>Number of Attendees:<%= rs.getString("attendees_count") %></p>
     <% } con.close(); %>
-
     <h2>
       <strong>RSVP Event</strong>
     </h2>
     <div>
       <form action="rsvpEvent" method="POST">
-        <input name="event_id" value="eventIdValue" />
+        <input name="event_id" value="" />
         <!-- The event ID -->
 
         <label for="rsvp_status">RSVP Status:</label>
