@@ -74,7 +74,7 @@ public class FilterEventsServlet extends HttpServlet {
                 resultHtml.append("<p>Name: ").append(rs.getString("name")).append("</p>");
                 resultHtml.append("<p>Description: ").append(rs.getString("description")).append("</p>");
                 resultHtml.append("<p>Type: ").append(rs.getString("event_type")).append("</p>");
-                resultHtml.append("<p>Date: ").append(rs.getString("event_date")).append("</p>");
+                resultHtml.append("<p>Date: ").append(rs.getString("date")).append("</p>");
                 resultHtml.append("<p>Location: ").append(rs.getString("location")).append("</p>");
                 resultHtml.append("</div><hr>");
             }
