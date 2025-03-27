@@ -12,11 +12,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.JsonObject;
+
 @WebServlet("/addEvent")
 public class AddEventServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("application/json");
+        JsonObject jsonResponse = new JsonObject();
+
         // Retrieve form data
         String name = request.getParameter("name");
         String eventType = request.getParameter("eventType");
@@ -24,56 +31,54 @@ public class AddEventServlet extends HttpServlet {
         String location = request.getParameter("location");
         String description = request.getParameter("description");
 
+        if (name == null || name.trim().isEmpty()) {
+            jsonResponse.addProperty("status", "error");
+            jsonResponse.addProperty("message", "Event name is required");
+            response.getWriter().write(jsonResponse.toString());
+            return;
+        }
+
         // Database connection details
         String jdbcURL = "jdbc:mysql://localhost:3306/event_management";
         String jdbcUsername = "root";
-        String jdbcPassword = "admin"; // Change this to your actual database password
+        String jdbcPassword = "root";
 
         Connection connection = null;
         PreparedStatement statement = null;
 
         try {
-            // System.out.print("Date::" + date);
-            // // Ensure the date format is correct (replace "T" with a space and add ":00" for seconds)
-            // date = date.replace("T", " ") + ":00"; // Converts "2025-05-20T10:00" to "2025-05-20 10:00:00"
 
-            // Convert the date string to a java.sql.Timestamp (MySQL DATETIME format)
-            java.sql.Timestamp eventDate;
-            try {
-                eventDate = java.sql.Timestamp.valueOf(date + " 00:00:00");
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Date is :" + date);
-            }
-
-            // Establish a database connection
+            // Establish database connection
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
 
-            // SQL query to insert a new event into the database
+            // SQL query
             String sql = "INSERT INTO events (name, event_type, date, location, description) VALUES (?, ?, ?, ?, ?)";
             statement = connection.prepareStatement(sql);
 
-            // Set values for the query parameters
+            // Set parameters
             statement.setString(1, name);
             statement.setString(2, eventType);
-            statement.setTimestamp(3, eventDate);
+            statement.setString(3, date);
             statement.setString(4, location);
             statement.setString(5, description);
 
-            // Execute the insert query
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {
-                // Redirect to a page showing the new event has been added
-                response.sendRedirect("eventAdded.jsp");
+                jsonResponse.addProperty("status", "success");
+                jsonResponse.addProperty("message", "Event created successfully!");
             } else {
-                // Display an error if the event wasn't added
-                response.sendRedirect("error.jsp");
+                jsonResponse.addProperty("status", "error");
+                jsonResponse.addProperty("message", "Failed to create event. Please try again.");
             }
+
         } catch (SQLException | ClassNotFoundException e) {
-            // Log the error (for debugging) and redirect to error page
+            jsonResponse.addProperty("status", "error");
+            jsonResponse.addProperty("message", "Database error: -- " + e.getMessage());
             e.printStackTrace();
-            response.sendRedirect("error.jsp");
+        } catch (IllegalArgumentException e) {
+            jsonResponse.addProperty("status", "error");
         } finally {
             try {
                 if (statement != null) {
@@ -86,5 +91,7 @@ public class AddEventServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
+
+        response.getWriter().write(jsonResponse.toString());
     }
 }

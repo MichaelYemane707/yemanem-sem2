@@ -1,3 +1,12 @@
-com\project\RSVPServlet.class
-com\project\AddEventServlet.class
+com\project\Event.class
 com\project\FilterEventsServlet.class
+com\project\RSVPServlet.class
+com\project\EventServlet.class
+com\project\AddEventServlet.class
+com\project\Database.class
+com\project\DeleteEventServlet.class
+com\project\EventTest.class
+com\project\EventDao.class
+com\project\EditServlet.class
+com\project\EventConstructor.class
+com\project\UpdateEventServlet.class

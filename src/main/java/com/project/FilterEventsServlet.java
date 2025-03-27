@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/filterEvents")
 public class FilterEventsServlet extends HttpServlet {
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve filter parameters from the request
@@ -26,7 +26,7 @@ public class FilterEventsServlet extends HttpServlet {
         // Database connection details
         String jdbcURL = "jdbc:mysql://localhost:3306/event_management";
         String jdbcUsername = "root";
-        String jdbcPassword = "admin"; // Update with your database password
+        String jdbcPassword = "root"; // Update with your database password
 
         Connection connection = null;
         PreparedStatement statement = null;
@@ -91,9 +91,15 @@ public class FilterEventsServlet extends HttpServlet {
             response.sendRedirect("error.jsp");
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (statement != null) statement.close();
-                if (connection != null) connection.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
